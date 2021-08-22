@@ -40,7 +40,6 @@ def collect_package_data(pkg_info: dict, pkg_name: str, metadata: bool = False):
 
 
 def read_required_packages_from_requirements():
-    import os
     import re
     import os.path
     import importlib.metadata
@@ -102,26 +101,3 @@ def deduplicate_data(analysis):
     _cleanup_data(analysis.datas)
     _cleanup_data(analysis.binaries)
     return analysis
-
-
-if __name__ == '__main__':
-    # local testing
-    import json
-
-    print(json.dumps(collect_package_data_from_requirements(), indent=4))
-    from PyInstaller.building.build_main import Analysis
-
-    pkg_info = collect_package_data_from_requirements()
-    a = Analysis(['mbed_cli.py'],
-                 pathex=[],
-                 binaries=pkg_info['binaries'],
-                 datas=pkg_info['datas'],
-                 hiddenimports=pkg_info['hiddenimports'],
-                 hookspath=[],
-                 hooksconfig={},
-                 runtime_hooks=collect_runtime_hooks(),
-                 excludes=[],
-                 win_no_prefer_redirects=False,
-                 win_private_assemblies=False,
-                 cipher=None,
-                 noarchive=False)
