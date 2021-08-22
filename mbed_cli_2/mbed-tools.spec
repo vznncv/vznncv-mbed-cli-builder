@@ -3,12 +3,19 @@
 
 block_cipher = None
 
+import os
+import sys
+sys.path.append(os.getcwd())
+import app_hook_utils
+pkg_info = {}
+app_hook_utils.collect_package_data(pkg_info, 'mbed_tools')
+pkg_info['datas'].extend(app_hook_utils.collect_sources('mbed_tools.targets.env'))
 
 a = Analysis(['entry_point.py'],
              pathex=[],
-             binaries=[],
-             datas=[],
-             hiddenimports=[],
+             binaries=pkg_info['binaries'],
+             datas=pkg_info['datas'],
+             hiddenimports=pkg_info['hiddenimports'],
              hookspath=[],
              hooksconfig={},
              runtime_hooks=[],
@@ -17,6 +24,7 @@ a = Analysis(['entry_point.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+a = app_hook_utils.deduplicate_data(a)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 
