@@ -112,6 +112,9 @@ export "$TARGET_VERSION_VAR_NAME"
 
 # copy result to global dist directory
 ARTIFACTS_FOLDER="$SCRIPT_DIR/dist"
+if [[ ! -e "$ARTIFACTS_FOLDER" ]]; then
+    mkdir "$ARTIFACTS_FOLDER"
+fi
 ARTIFACTS_TOTAL=0
 while read -r line; do
     artifact_name=$(basename "$line")
