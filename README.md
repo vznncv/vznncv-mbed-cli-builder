@@ -10,7 +10,9 @@ and [Mbed CLI 2](https://github.com/ARMmbed/mbed-tools) as standalone executable
     - python 3.8 or higher
     - tox
 
-2. Run `./build.sh mbed-cli` to build mbed-cli 1 tool.
+2. Run `./build.sh mbed-cli` to build mbed-cli 1 tool. Alternatively, you can run
+   `./build.sh mbed-cli-git-only` to build `mbed-cli` version that support only `git`. It eliminates problems
+   of `mbed-cli` usage on a host that doesn't have Mercurial (`hg` command).
 
 3. Run `./build.sh mbed-tools` to build mbed-cli 2 tool.
 
