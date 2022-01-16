@@ -57,7 +57,7 @@ function resolve_tool_version() {
 function show_help() {
     log "Build mbed cli tools as standalone executable"
     log ""
-    log "Usage ./$(basename "$0") {mbed-cli,mbed-tools}[=<version>]"
+    log "Usage ./$(basename "$0") {mbed-cli,mbed-cli-git-only,mbed-tools}[=<version>]"
     log ""
 }
 
@@ -88,10 +88,16 @@ elif [[ "${#TARGET_TOOLS[@]}" -gt 1 ]]; then
 fi
 TARGET_NAME=$(sed -E 's/^([^=]+)=*(.*)$/\1/' <<<"${TARGET_TOOLS[0]}")
 TARGET_VERSION=$(sed -E 's/^([^=]+)=*(.*)$/\2/' <<<"${TARGET_TOOLS[0]}")
+TARGET_TOX="pyinstaller"
 
 if [[ "$TARGET_NAME" == "mbed-cli" ]]; then
     TARGET_BUILD_DIR="$SCRIPT_DIR/mbed_cli_1"
     TARGET_VERSION_VAR_NAME="MBED_CLI_VERSION"
+elif [[ "$TARGET_NAME" == "mbed-cli-git-only" ]]; then
+    TARGET_BUILD_DIR="$SCRIPT_DIR/mbed_cli_1"
+    TARGET_VERSION_VAR_NAME="MBED_CLI_VERSION"
+    TARGET_NAME="mbed-cli"
+    TARGET_TOX="pyinstaller-git-only"
 elif [[ "$TARGET_NAME" == "mbed-tools" ]]; then
     TARGET_BUILD_DIR="$SCRIPT_DIR/mbed_cli_2"
     TARGET_VERSION_VAR_NAME="MBED_TOOLS_VERSION"
@@ -107,7 +113,7 @@ declare "$TARGET_VERSION_VAR_NAME=$TARGET_VERSION"
 export "$TARGET_VERSION_VAR_NAME"
 (
     cd "$TARGET_BUILD_DIR"
-    tox -e pyinstaller
+    tox -e "$TARGET_TOX"
 )
 
 # copy result to global dist directory
